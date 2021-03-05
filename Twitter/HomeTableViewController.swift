@@ -20,17 +20,25 @@ class HomeTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadTweets()
+//        loadTweets()
 
         UserRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         tableView.refreshControl = UserRefreshControl;
+        tableView.rowHeight = UITableView.automaticDimension
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+
         
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("page refreshed after tweet")
+        super.viewDidAppear(animated)
+        self.loadTweets()
     }
     
     @objc func loadTweets(){
@@ -124,6 +132,10 @@ class HomeTableViewController: UITableViewController {
             cell.TweetImage.image = UIImage(data: imageData)
         }
         
+        //tweet object for likes is favorited or liked?
+        cell.setFavorite(tweetDictionary[indexPath.row]["favorited"] as! Bool)
+        cell.TweetID = tweetDictionary[indexPath.row]["id"] as! Int
+        cell.setRetweeted(tweetDictionary[indexPath.row]["retweeted"] as! Bool)
         return cell
     }
 
